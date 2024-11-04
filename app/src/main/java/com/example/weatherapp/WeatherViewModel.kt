@@ -16,8 +16,8 @@ class WeatherViewModel: ViewModel() {
             try {
                 val response = weatherApi.getWeather(city, apiKey)
                 _weatherData.value = response
-            } catch (err: Exception){
-                err.printStackTrace()
+            } catch (e: Exception){
+                e.printStackTrace()
             }
         }
     }
