@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.widget.Button
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,11 +13,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MaterialTheme.typography
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -92,9 +96,26 @@ fun WeatherScreen(){
                         Text(text = "Пошук")
                     }
                     Spacer(modifier = Modifier.height(16.dp)) // Далі код з містами, який має бути на іншому скріні
+
+                    if (weatherData?.isNotEmpty() == true) {
+                        Column {
+                                Text(
+                                    text = "Місто: ${weatherData?.name}",
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(8.dp)
+                                        .clickable {
+                                            // Обробка переходу або іншої дії при натисканні на місто
+                                        },
+                                    color = Color.Black,
+                                    style = typography.bodyLarge
+                                )
+
+                        }
+                    }
                 }
         }
-    }
+}
 
 
 @Preview(showBackground = true)
