@@ -44,6 +44,9 @@ import com.example.weatherapp.ui.theme.BlueJC
 import com.example.weatherapp.ui.theme.DarkBlueJC
 import com.example.weatherapp.ui.theme.WeatherAppTheme
 
+// Основна активність додатку, яка відображає головний екран користувачеві.
+// Відповідає за виклик WeatherScreen та управління UI.
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,6 +55,10 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+
+
+//    Головний Composable для відображення екрану пошуку міст.
+//    Містить поле введення для введення назви міста та кнопку для виконання пошуку.
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -76,6 +83,9 @@ fun WeatherScreen(){
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Top
                 ) {
+
+//                  Поле для введення назви міста
+
                     Spacer(modifier = Modifier.height(180.dp))
                     OutlinedTextField(value = city,
                         onValueChange = {city = it},
@@ -90,6 +100,9 @@ fun WeatherScreen(){
                             focusedLabelColor = DarkBlueJC
                         )
                     )
+
+//                  Кнопка для виконання пошуку міст
+
                     Spacer(modifier = Modifier.height(16.dp))
                     Button(
                         onClick = { viewModel.findCities(city) },
@@ -99,7 +112,8 @@ fun WeatherScreen(){
                     }
                     Spacer(modifier = Modifier.height(16.dp))
 
-                            // Список міст
+                    // Список міст
+
                     if (cities.isNotEmpty()) {
                         LazyColumn {
                             items(cities) { city ->
@@ -123,6 +137,7 @@ fun WeatherScreen(){
         }
 }
 
+//     Прев'ю компонента WeatherScreen для перегляду в режимі розробки.
 
 @Preview(showBackground = true)
 @Composable
