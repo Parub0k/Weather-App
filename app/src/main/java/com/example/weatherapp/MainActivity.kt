@@ -57,7 +57,8 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun WeatherScreen(){
     val viewModel: WeatherViewModel = viewModel()
-    val weatherData by viewModel.weatherData.collectAsState()
+    // val weatherData by viewModel.weatherData.collectAsState()
+    val cities by viewModel.cities.collectAsState()
     var city by remember {
         mutableStateOf("")
     }
@@ -78,7 +79,7 @@ fun WeatherScreen(){
                     Spacer(modifier = Modifier.height(180.dp))
                     OutlinedTextField(value = city,
                         onValueChange = {city = it},
-                        label = { Text("Місто") },
+                        label = { Text("Введіть місто") },
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(30.dp),
                         colors = TextFieldDefaults.colors(
@@ -90,27 +91,32 @@ fun WeatherScreen(){
                         )
                     )
                     Spacer(modifier = Modifier.height(16.dp))
-                    Button(onClick = { viewModel.fetchWeather(city, apiKey) },
-                            colors = ButtonDefaults.buttonColors(BlueJC))
-                    {
+                    Button(
+                        onClick = { viewModel.findCities(city) },
+                        colors = ButtonDefaults.buttonColors(BlueJC)
+                    ) {
                         Text(text = "Пошук")
                     }
-                    Spacer(modifier = Modifier.height(16.dp)) // Далі код з містами, який має бути на іншому скріні
+                    Spacer(modifier = Modifier.height(16.dp))
 
-                    if (weatherData?.isNotEmpty() == true) {
-                        Column {
+                            // Список міст
+                    if (cities.isNotEmpty()) {
+                        LazyColumn {
+                            items(cities) { city ->
                                 Text(
-                                    text = "Місто: ${weatherData?.name}",
+                                    text = "${city.name}, ${city.country}",
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .padding(8.dp)
                                         .clickable {
-                                            // Обробка переходу або іншої дії при натисканні на місто
+                                            // Виклик запиту погоди для обраного міста
+                                            viewModel.fetchWeather(city.name, apiKey)
+                                            // Тут відбудеться перехід на інший екран
                                         },
                                     color = Color.Black,
-                                    style = typography.bodyLarge
+                                    style = MaterialTheme.typography.bodyLarge
                                 )
-
+                            }
                         }
                     }
                 }
