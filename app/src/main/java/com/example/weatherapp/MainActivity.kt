@@ -4,11 +4,13 @@ import android.os.Bundle
 import android.widget.Button
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -16,9 +18,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MaterialTheme.typography
 import androidx.compose.material3.OutlinedTextField
@@ -42,6 +50,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.weatherapp.ui.theme.BlueJC
 import com.example.weatherapp.ui.theme.DarkBlueJC
+import com.example.weatherapp.ui.theme.PastelBlue
 import com.example.weatherapp.ui.theme.WeatherAppTheme
 
 // Основна активність додатку, яка відображає головний екран користувачеві.
@@ -90,15 +99,28 @@ fun WeatherScreen(){
                     OutlinedTextField(value = city,
                         onValueChange = {city = it},
                         label = { Text("Введіть місто") },
-                        modifier = Modifier.fillMaxWidth(),
+                        placeholder = { Text("Введіть місто") },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable { city = "" },
                         shape = RoundedCornerShape(30.dp),
                         colors = TextFieldDefaults.colors(
                             focusedContainerColor = Color.White,
                             unfocusedContainerColor = Color.White,
                             unfocusedIndicatorColor = BlueJC,
-                            focusedIndicatorColor = BlueJC,
-                            focusedLabelColor = DarkBlueJC
-                        )
+                            focusedIndicatorColor = Color.Black,
+                            focusedLabelColor = Color.White
+                        ),
+                        trailingIcon = {
+                            if (city.isNotEmpty()) {
+                                IconButton(onClick = { city = "" }) {
+                                    Icon(
+                                        imageVector = Icons.Default.Close,
+                                        contentDescription = "Очистити текст"
+                                    )
+                                }
+                            }
+                        }
                     )
 
 //                  Кнопка для виконання пошуку міст
@@ -115,21 +137,43 @@ fun WeatherScreen(){
                     // Список міст
 
                     if (cities.isNotEmpty()) {
-                        LazyColumn {
+                        LazyColumn (
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .fillMaxHeight()
+                                .padding(8.dp)
+                        ) {
                             items(cities) { city ->
-                                Text(
-                                    text = "${city.name}, ${city.country}",
+                                Card(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .padding(8.dp)
                                         .clickable {
                                             // Виклик запиту погоди для обраного міста
                                             viewModel.fetchWeather(city.name, apiKey)
-                                            // Тут відбудеться перехід на інший екран
+                                            // TODO Тут відбудеться перехід на інший екран
                                         },
-                                    color = Color.Black,
-                                    style = MaterialTheme.typography.bodyLarge
-                                )
+                                    shape = RoundedCornerShape(8.dp),
+                                    elevation = CardDefaults.elevatedCardElevation(4.dp),
+                                ) {
+                                    Column(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .background(PastelBlue)
+                                            .padding(16.dp)
+                                    ) {
+                                        Text(
+                                            text = "${city.name}, ${city.country}",
+                                            style = MaterialTheme.typography.bodyLarge,
+                                            color = Color.Black
+                                        )
+                                        Text(
+                                            text = "Регіон: ${city.region}",
+                                            style = MaterialTheme.typography.bodySmall,
+                                            color = Color.DarkGray
+                                        )
+                                    }
+                                }
                             }
                         }
                     }

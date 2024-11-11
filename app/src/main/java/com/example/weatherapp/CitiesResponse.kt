@@ -10,5 +10,6 @@ data class CitiesResponse(
 
 data class City(
     val name: String,
-    val country: String
+    val country: String,
+    val region: String
 )

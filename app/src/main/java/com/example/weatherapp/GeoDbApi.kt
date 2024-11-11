@@ -20,7 +20,7 @@ interface GeoDbApi {
     @GET("geo/cities")
     suspend fun findCities(
         @Query("namePrefix") cityName: String,
-        @Query("limit") limit: Int = 5,
+        @Query("limit") limit: Int = 10,
     ): CitiesResponse
 
     companion object {
