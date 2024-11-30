@@ -138,7 +138,7 @@ fun WeatherScreen(){
 }
 
 //     Прев'ю компонента WeatherScreen для перегляду в режимі розробки.
-// test
+// test1
 @Preview(showBackground = true)
 @Composable
 fun WeatherPreview(){
