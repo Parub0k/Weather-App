@@ -3,29 +3,32 @@ package com.example.weatherapp
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.weatherapp.ui.theme.WeatherAppTheme
 
 class ScreenTwo : ComponentActivity() {
+    private val viewModel: WeatherViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -34,12 +37,16 @@ class ScreenTwo : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    MainLayout()
+                    MainLayout(viewModel)
                 }
             }
         }
+
+        // Fetch the weather data for a specific city
+        viewModel.fetchWeather("Lutsk", "eb5660ebff52108bbbd6f5ada04a66b7")
     }
 }
+
 
 @Composable
 fun MainTemperature(
@@ -252,7 +259,9 @@ fun ThirdUIRow(
 }
 
 @Composable
-fun MainLayout(modifier: Modifier = Modifier){
+fun MainLayout(viewModel: WeatherViewModel) {
+    val weather by viewModel.weather.observeAsState()
+
     val background = painterResource(R.drawable.app_templ)
     Box(
         modifier = Modifier.fillMaxSize(),
@@ -269,22 +278,40 @@ fun MainLayout(modifier: Modifier = Modifier){
             verticalArrangement = Arrangement.Center,
             modifier = Modifier.padding(16.dp)
         ) {
-            MainTemperature(
-                "Lutsk",
-                "29°C"
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            SecondUIRow()
-            Spacer(modifier = Modifier.height(16.dp))
-            ThirdUIRow()
+            if (weather != null) {
+                MainTemperature(
+                    city = weather?.name ?: "",
+                    temperature = "${weather?.main?.temp}°C"
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                SecondUIRow()
+                Spacer(modifier = Modifier.height(16.dp))
+                ThirdUIRow()
+            } else {
+                Text("Loading...", color = Color.White)
+            }
         }
+    }
+}
+
+
+// Inside the same file as your MainLayout and GreetingPreview1 functions
+class MockWeatherViewModel : WeatherViewModel() {
+    init {
+        _weather.value = WeatherResponse(
+            main = Main(29.0f, 10),
+            weather = listOf(Weather(description = "sunny", 10)),
+            name = "Lutsk"
+        )
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun GreetingPreview() {
+fun GreetingPreview1() {
+    val mockViewModel = MockWeatherViewModel()
     WeatherAppTheme {
-        MainLayout()
+        MainLayout(mockViewModel)
     }
 }
+
