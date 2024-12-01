@@ -3,8 +3,12 @@ package com.example.weatherapp
 data class WeatherResponse(
     val name: String,
     val main: Main,
-    val weather: Weather
-)
+    val weather: List<Weather>
+) {
+    fun isNotEmpty(): Boolean {
+        return name.isNotEmpty() && main != null && weather.isNotEmpty()
+    }
+}
 
 data class Main (
     val temp: Float,
@@ -12,6 +16,5 @@ data class Main (
 )
 
 data class Weather (
-    val description: String,
-    val humidity: Int
+    val description: String
 )
