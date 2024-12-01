@@ -78,7 +78,7 @@ fun WeatherScreen(){
     var city by remember {
         mutableStateOf("")
     }
-        val apiKey = "086ea00f450ae7bcc30164389f96de55"
+        val apiKey = "086ea00f450ae7bcc30164389f96de55" // Перенести в налаштування проєкту
 
         Box(modifier = Modifier
             .fillMaxSize()
