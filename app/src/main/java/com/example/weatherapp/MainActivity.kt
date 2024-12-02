@@ -1,5 +1,6 @@
 package com.example.weatherapp
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import androidx.activity.ComponentActivity
@@ -44,6 +45,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -79,6 +81,7 @@ fun WeatherScreen(){
         mutableStateOf("")
     }
         val apiKey = "086ea00f450ae7bcc30164389f96de55" // Перенести в налаштування проєкту
+        val context = LocalContext.current // Extract the context here
 
         Box(modifier = Modifier
             .fillMaxSize()
@@ -151,7 +154,9 @@ fun WeatherScreen(){
                                         .clickable {
                                             // Виклик запиту погоди для обраного міста
                                             viewModel.fetchWeather(city.name, apiKey)
-                                            // TODO Тут відбудеться перехід на інший екран
+                                            val intent = Intent(context, ScreenTwo::class.java)
+                                            context.startActivity(intent)
+                                                   // TODO Тут відбудеться перехід на інший екран
                                         },
                                     shape = RoundedCornerShape(8.dp),
                                     elevation = CardDefaults.elevatedCardElevation(4.dp),
