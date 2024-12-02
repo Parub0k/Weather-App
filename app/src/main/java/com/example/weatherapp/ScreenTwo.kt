@@ -11,7 +11,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -24,6 +23,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.runtime.collectAsState
 import com.example.weatherapp.ui.theme.WeatherAppTheme
 
 class ScreenTwo : ComponentActivity() {
@@ -260,7 +260,8 @@ fun ThirdUIRow(
 
 @Composable
 fun MainLayout(viewModel: WeatherViewModel) {
-    val weather by viewModel.weather.observeAsState()
+    // Convert StateFlow to Compose state
+    val weather by viewModel.weatherData.collectAsState()
 
     val background = painterResource(R.drawable.app_templ)
     Box(
@@ -294,13 +295,12 @@ fun MainLayout(viewModel: WeatherViewModel) {
     }
 }
 
-
 // Inside the same file as your MainLayout and GreetingPreview1 functions
 class MockWeatherViewModel : WeatherViewModel() {
     init {
-        _weather.value = WeatherResponse(
+        _weatherData.value = WeatherResponse(
             main = Main(29.0f, 10),
-            weather = listOf(Weather(description = "sunny", 10)),
+            weather = listOf(Weather(description = "sunny")),
             name = "Lutsk"
         )
     }

@@ -10,10 +10,10 @@ import kotlinx.coroutines.launch
 //   ViewModel для управління запитами до GeoDb API та зберіганням стану отриманих даних.
 //   Здійснює пошук міст та надає доступ до результатів через StateFlow.
 
-class WeatherViewModel: ViewModel() {
+open class WeatherViewModel: ViewModel() {
 
     // Інстанси для WeatherApi
-    private val _weatherData = MutableStateFlow<WeatherResponse?>(null)
+    val _weatherData = MutableStateFlow<WeatherResponse?>(null)
     val weatherData: StateFlow<WeatherResponse?> = _weatherData
     private val weatherApi = WeatherApi.create()
 
