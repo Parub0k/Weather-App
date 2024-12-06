@@ -52,6 +52,7 @@ import com.example.weatherapp.ui.theme.BlueJC
 import com.example.weatherapp.ui.theme.DarkBlueJC
 import com.example.weatherapp.ui.theme.PastelBlue
 import com.example.weatherapp.ui.theme.WeatherAppTheme
+import com.example.weatherapp.BuildConfig
 
 // Основна активність додатку, яка відображає головний екран користувачеві.
 // Відповідає за виклик WeatherScreen та управління UI.
@@ -78,7 +79,7 @@ fun WeatherScreen(){
     var city by remember {
         mutableStateOf("")
     }
-        val apiKey = "086ea00f450ae7bcc30164389f96de55" // Перенести в налаштування проєкту
+        val apiKey = BuildConfig.API_KEY
 
         Box(modifier = Modifier
             .fillMaxSize()
