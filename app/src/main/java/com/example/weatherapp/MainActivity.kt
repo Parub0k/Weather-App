@@ -50,6 +50,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.weatherapp.ui.theme.BlueJC
 import com.example.weatherapp.ui.theme.PastelBlue
 import com.example.weatherapp.ui.theme.WeatherAppTheme
+import com.example.weatherapp.BuildConfig
 import androidx.activity.viewModels
 import androidx.compose.foundation.Image
 import androidx.compose.ui.geometry.Offset
@@ -225,8 +226,10 @@ fun ScreenTwoScreen(navController: NavController?, viewModel: WeatherViewModel, 
 @Composable
 fun WeatherScreen(navController: NavController?, viewModel: WeatherViewModel) {
     val cities by viewModel.cities.collectAsState()
-    var city by remember { mutableStateOf("") }
-    val apiKey = "086ea00f450ae7bcc30164389f96de55"
+    var city by remember {
+        mutableStateOf("")
+    }
+        val apiKey = BuildConfig.API_KEY
 
     Box(
         modifier = Modifier
